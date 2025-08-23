@@ -40,7 +40,7 @@
       providers/WaypointRunner.yaml
     </capability_provider>
 
-    <!-- OccupancyGridRunner -->
+    OccupancyGridRunner
     <capability_interface>
       interfaces/OccupancyGridRunner.yaml
     </capability_interface>

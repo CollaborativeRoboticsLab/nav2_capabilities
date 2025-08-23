@@ -74,9 +74,12 @@ public:
 
     // Store frame names in variables that will be used to
     // compute transformations
-    std::string mapFrame(map);
-    std::string odomFrame(odom);
-    std::string robotFrame(robot);
+    // Fallbacks if missing/empty
+    const std::string mapFrame = (map && *map) ? std::string(map) : std::string("map");
+    const std::string odomFrame = (odom && *odom) ? std::string(odom) : std::string("odom");
+    const std::string robotFrame = (robot && *robot) ? std::string(robot) : std::string("base_link");
+
+    info_("Transforming from " + mapFrame + " to " + robotFrame + " or " + odomFrame + " to " + robotFrame, id);
 
     // Try to use map -> robot first
     try
