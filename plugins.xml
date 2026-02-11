@@ -1,9 +1,4 @@
 <library path="nav2_capabilities">
-    <class type="capabilities2_runner::OccupancyGridRunner" base_class_type="capabilities2_runner::RunnerBase">
-        <description>
-            A plugin that provide occupancy grid map extraction capability
-        </description>
-    </class>
     <class type="capabilities2_runner::RobotPoseRunner" base_class_type="capabilities2_runner::RunnerBase">
         <description>
             A plugin that provide robot pose extraction capability

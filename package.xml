@@ -40,15 +40,6 @@
       providers/WaypointRunner.yaml
     </capability_provider>
 
-    OccupancyGridRunner
-    <capability_interface>
-      interfaces/OccupancyGridRunner.yaml
-    </capability_interface>
-
-    <capability_provider>
-      providers/OccupancyGridRunner.yaml
-    </capability_provider>
-
     <!-- RobotPoseRunner -->
     <capability_interface>
       interfaces/RobotPoseRunner.yaml
