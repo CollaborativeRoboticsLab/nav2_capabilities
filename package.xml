@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>capabilities2_runner_nav2</name>
+  <name>nav2_capabilities</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
 

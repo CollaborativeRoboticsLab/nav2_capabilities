@@ -5,5 +5,5 @@ name: OccupancyGridRunner
 spec_type: provider
 spec_version: 1.1
 description: "The capability provider for the robot's occupancy grid map interface"
-implements: capabilities2_runner_nav2/OccupancyGridRunner
+implements: nav2_capabilities/OccupancyGridRunner
 runner: capabilities2_runner::OccupancyGridRunner

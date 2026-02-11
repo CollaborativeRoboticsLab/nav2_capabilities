@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(capabilities2_runner_nav2)
+project(nav2_capabilities)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)

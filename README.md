@@ -1,4 +1,4 @@
-# Capabilities2_runner_nav2
+# nav2_capabilities
 
 Provides runners for Nav2 stack.
 

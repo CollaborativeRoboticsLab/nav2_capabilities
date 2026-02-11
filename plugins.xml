@@ -1,4 +1,4 @@
-<library path="capabilities2_runner_nav2">
+<library path="nav2_capabilities">
     <class type="capabilities2_runner::OccupancyGridRunner" base_class_type="capabilities2_runner::RunnerBase">
         <description>
             A plugin that provide occupancy grid map extraction capability
