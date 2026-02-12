@@ -2,14 +2,14 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include <tinyxml2.h>
-#include "geometry_msgs/msg/transform_stamped.hpp"
-
-#include <capabilities2_runner/topic_runner.hpp>
-
 #include "tf2/exceptions.h"
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/buffer.h"
+
+#include "geometry_msgs/msg/transform_stamped.hpp"
+
+#include <capabilities2_runner/topic_runner.hpp>
+#include <capabilities2_runner/threadtrigger_runner.hpp>
 
 namespace capabilities2_runner
 {
@@ -20,10 +20,10 @@ namespace capabilities2_runner
  * Capability Class to grab odometry data
  *
  */
-class RobotPoseRunner : public RunnerBase
+class RobotPoseRunner : public ThreadTriggerRunner
 {
 public:
-  RobotPoseRunner() : RunnerBase()
+  RobotPoseRunner() : ThreadTriggerRunner()
   {
   }
 
@@ -32,14 +32,18 @@ public:
    *
    * @param node shared pointer to the capabilities node. Allows to use ros node related functionalities
    * @param run_config runner configuration loaded from the yaml file
+   * @param bond_id bond id for the runner instance, used for event emission and tracking
    */
-  virtual void start(rclcpp::Node::SharedPtr node, const runner_opts& run_config) override
+  virtual void start(rclcpp::Node::SharedPtr node, const runner_opts& run_config, const std::string& bond_id) override
   {
     // initialize the runner base by storing node pointer and run config
     init_base(node, run_config);
 
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>(node_->get_clock());
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
+    // emit start event
+    emit_started(bond_id, param_on_started());
   }
 
   /**
@@ -49,84 +53,66 @@ public:
    *
    * @param parameters pointer to tinyxml2::XMLElement that contains parameters
    */
-  virtual void execution(int id) override
+  virtual void execution(capabilities2_events::EventParameters& parameters, const std::string& thread_id) override
   {
-    const char* map;
-    const char* odom;
-    const char* robot;
+    // split thread_id to get bond_id and trigger_id (format: "bond_id/trigger_id")
+    std::string bond_id = ThreadTriggerRunner::bond_from_thread_id(thread_id);
+    std::string trigger_id = ThreadTriggerRunner::trigger_from_thread_id(thread_id);
 
-    // if parameters are not provided then cannot proceed
-    if (!parameters_[id])
-      throw runner_exception("cannot grab data without parameters");
+    std::string map = "map", odom = "odom", robot = "base_link";
 
-    // trigger the events related to on_started state
-    if (events[id].on_started.interface != "")
-    {
-      event_(EventType::STARTED, id, events[id].on_started.interface, events[id].on_started.provider);
-      triggerFunction_(events[id].on_started.interface, update_on_started(events[id].on_started.parameters));
-    }
+    if (parameters.has_value("map"))
+      map = std::any_cast<std::string>(parameters.get_value("map"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: map, defaulting to 'map'");
 
-    info_("Waiting for Transformation.", id);
+    if (parameters.has_value("odom"))
+      odom = std::any_cast<std::string>(parameters.get_value("odom"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: odom, defaulting to 'odom'");
 
-    parameters_[id]->QueryStringAttribute("map", &map);
-    parameters_[id]->QueryStringAttribute("odom", &odom);
-    parameters_[id]->QueryStringAttribute("robot", &robot);
+    if (parameters.has_value("robot"))
+      robot = std::any_cast<std::string>(parameters.get_value("robot"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: robot, defaulting to 'base_link'");
 
-    // Store frame names in variables that will be used to
-    // compute transformations
-    // Fallbacks if missing/empty
-    const std::string mapFrame = (map && *map) ? std::string(map) : std::string("map");
-    const std::string odomFrame = (odom && *odom) ? std::string(odom) : std::string("odom");
-    const std::string robotFrame = (robot && *robot) ? std::string(robot) : std::string("base_link");
-
-    info_("Transforming from " + mapFrame + " to " + robotFrame + " or " + odomFrame + " to " + robotFrame, id);
+    RCLCPP_INFO(node_->get_logger(), "Transforming from %s to %s or %s to %s", map.c_str(), robot.c_str(), odom.c_str(),
+                robot.c_str());
 
     // Try to use map -> robot first
     try
     {
-      transform_ = tf_buffer_->lookupTransform(mapFrame, robotFrame, tf2::TimePointZero);
+      transform_ = tf_buffer_->lookupTransform(map, robot, tf2::TimePointZero);
 
       // trigger the events related to on_success state
-      if (events[id].on_success.interface != "")
-      {
-        event_(EventType::SUCCEEDED, id, events[id].on_success.interface, events[id].on_success.provider);
-        triggerFunction_(events[id].on_success.interface, update_on_success(events[id].on_success.parameters));
-      }
+      emit_succeeded(bond_id, param_on_success());
 
-      info_("Transformation received. Thread closing.", id);
+      RCLCPP_INFO(node_->get_logger(), "Transformation received. Thread closing for event %s", trigger_id.c_str());
       return;
     }
     catch (tf2::TransformException& ex)
     {
-      info_("Could not transform from map to robot: " + std::string(ex.what()), id);
+      RCLCPP_INFO(node_->get_logger(), "Trying to transform from %s to %s", odom.c_str(), robot.c_str());
     }
 
     // Fall back to odom -> robot
     try
     {
-      transform_ = tf_buffer_->lookupTransform(odomFrame, robotFrame, tf2::TimePointZero);
+      transform_ = tf_buffer_->lookupTransform(odom, robot, tf2::TimePointZero);
 
       // trigger the events related to on_success state
-      if (events[id].on_success.interface != "")
-      {
-        event_(EventType::SUCCEEDED, id, events[id].on_success.interface, events[id].on_success.provider);
-        triggerFunction_(events[id].on_success.interface, update_on_success(events[id].on_success.parameters));
-      }
+      emit_succeeded(bond_id, param_on_success());
 
-      info_("Transformation received. Thread closing.", id);
+      RCLCPP_INFO(node_->get_logger(), "Transformation received. Thread closing for event %s", trigger_id.c_str());
     }
     catch (tf2::TransformException& ex)
     {
-      info_("Could not transform from odom to robot: " + std::string(ex.what()), id);
+      RCLCPP_INFO(node_->get_logger(), "Could not transform from odom to robot: %s", ex.what());
 
       // trigger the events related to on_failure state
-      if (events[id].on_failure.interface != "")
-      {
-        event_(EventType::FAILED, id, events[id].on_failure.interface, events[id].on_failure.provider);
-        triggerFunction_(events[id].on_failure.interface, update_on_failure(events[id].on_failure.parameters));
-      }
+      emit_failed(bond_id, param_on_failure());
 
-      info_("Transformation not received. Thread closing.", id);
+      RCLCPP_INFO(node_->get_logger(), "Transformation not received. Thread closing for event %s", trigger_id.c_str());
     }
   }
 
@@ -134,7 +120,7 @@ public:
    * @brief stop function to cease functionality and shutdown
    *
    */
-  virtual void stop() override
+  virtual void stop(const std::string& bond_id) override
   {
     // if the node pointer is empty then throw an error
     // this means that the runner was not started and is being used out of order
@@ -149,12 +135,7 @@ public:
       throw runner_exception("cannot stop runner subscriber that was not started");
 
     // Trigger on_stopped event if defined
-    if (events[runner_id].on_stopped.interface != "")
-    {
-      event_(EventType::STOPPED, -1, events[runner_id].on_stopped.interface, events[runner_id].on_stopped.provider);
-      triggerFunction_(events[runner_id].on_stopped.interface,
-                       update_on_stopped(events[runner_id].on_stopped.parameters));
-    }
+    emit_stopped(bond_id, param_on_stopped());
   }
 
 protected:
@@ -164,43 +145,20 @@ protected:
    * This function is used to inject new data into the XMLElement containing
    * parameters related to the on_success trigger event
    *
-    <Pose>
-        <position x="1.23" y="4.56" z="7.89"/>
-        <orientation x="0.12" y="0.34" z="0.56" w="0.78"/>
-    </Pose>
-   *
-   * @param parameters pointer to the XMLElement containing parameters
-   * @return pointer to the XMLElement containing updated parameters
+   * @return EventParameters updated parameters for on_success event
    */
-  virtual std::string update_on_success(std::string& parameters)
+  virtual capabilities2_events::EventParameters param_on_success() override
   {
-    tinyxml2::XMLElement* element = convert_to_xml(parameters);
+    capabilities2_events::EventParameters parameters;
+    parameters.set_value("x", transform_.transform.translation.x, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("y", transform_.transform.translation.y, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("z", transform_.transform.translation.z, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("qx", transform_.transform.rotation.x, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("qy", transform_.transform.rotation.y, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("qz", transform_.transform.rotation.z, capabilities2_events::OptionType::DOUBLE);
+    parameters.set_value("qw", transform_.transform.rotation.w, capabilities2_events::OptionType::DOUBLE);
 
-    // Create the Pose element as a child of the existing parameters element
-    tinyxml2::XMLElement* poseElement = element->GetDocument()->NewElement("Pose");
-    element->InsertEndChild(poseElement);
-
-    // Position element with attributes
-    tinyxml2::XMLElement* positionElement = element->GetDocument()->NewElement("position");
-    positionElement->SetAttribute("x", transform_.transform.translation.x);
-    positionElement->SetAttribute("y", transform_.transform.translation.y);
-    positionElement->SetAttribute("z", transform_.transform.translation.z);
-    poseElement->InsertEndChild(positionElement);
-
-    // Orientation element with attributes
-    tinyxml2::XMLElement* orientationElement = element->GetDocument()->NewElement("orientation");
-    orientationElement->SetAttribute("x", transform_.transform.rotation.x);
-    orientationElement->SetAttribute("y", transform_.transform.rotation.y);
-    orientationElement->SetAttribute("z", transform_.transform.rotation.z);
-    orientationElement->SetAttribute("w", transform_.transform.rotation.w);
-    poseElement->InsertEndChild(orientationElement);
-
-    // Return the updated parameters element with Pose added as string
-    std::string result = convert_to_string(element);
-
-    // output_("on_success trigger parameter", result);
-
-    return result;
+    return parameters;
   };
 
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_{ nullptr };

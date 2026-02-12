@@ -3,7 +3,6 @@
 #include <thread>
 #include <chrono>
 #include <string>
-#include <tinyxml2.h>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 
@@ -35,10 +34,14 @@ public:
    *
    * @param node shared pointer to the capabilities node. Allows to use ros node related functionalities
    * @param run_config runner configuration loaded from the yaml file
+   * @param bond_id unique identifier for the group of connections associated with this runner trigger event
    */
-  virtual void start(rclcpp::Node::SharedPtr node, const runner_opts& run_config) override
+  virtual void start(rclcpp::Node::SharedPtr node, const runner_opts& run_config, const std::string& bond_id) override
   {
     init_action(node, run_config, "navigate_to_pose");
+
+    // emit start event
+    emit_started(bond_id, param_on_started());
   }
 
 protected:
@@ -48,12 +51,49 @@ protected:
    '<Event name=follow_waypoints provider=WaypointRunner x='$value' y='$value' />'
    * @return ActionT::Goal the generated goal
    */
-  virtual nav2_msgs::action::NavigateToPose::Goal generate_goal(tinyxml2::XMLElement* parameters, int id) override
+  virtual nav2_msgs::action::NavigateToPose::Goal
+  generate_goal(capabilities2_events::EventParameters& parameters) override
   {
-    parameters->QueryDoubleAttribute("x", &x);
-    parameters->QueryDoubleAttribute("y", &y);
+    double x, y, z, qx, qy, qz = 0.0;
+    double qw = 1.0;  // default value for qw
 
-    info_("goal consist of x: " + std::to_string(x) + " and y: " + std::to_string(y), id);
+    if (parameters.has_value("x"))
+      x = std::any_cast<double>(parameters.get_value("x"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: x, defaulting to 0.0");
+
+    if (parameters.has_value("y"))
+      y = std::any_cast<double>(parameters.get_value("y"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: y, defaulting to 0.0");
+
+    if (parameters.has_value("z"))
+      z = std::any_cast<double>(parameters.get_value("z"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: z, defaulting to 0.0");
+
+    if (parameters.has_value("qx"))
+      qx = std::any_cast<double>(parameters.get_value("qx"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: qx, defaulting to 0.0");
+
+    if (parameters.has_value("qy"))
+      qy = std::any_cast<double>(parameters.get_value("qy"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: qy, defaulting to 0.0");
+    
+    if (parameters.has_value("qz"))
+      qz = std::any_cast<double>(parameters.get_value("qz"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: qz, defaulting to 0.0");
+
+    if (parameters.has_value("qw"))
+      qw = std::any_cast<double>(parameters.get_value("qw"));
+    else
+      RCLCPP_WARN(node_->get_logger(), "missing parameter: qw, defaulting to 1.0");
+
+    RCLCPP_INFO(node_->get_logger(), "goal consist of x: %f, y: %f, z: %f, qx: %f, qy: %f, qz: %f, qw: %f", x, y, z, qx,
+                qy, qz, qw);
 
     nav2_msgs::action::NavigateToPose::Goal goal_msg;
     geometry_msgs::msg::PoseStamped pose_msg;
@@ -64,8 +104,11 @@ protected:
 
     pose_msg.pose.position.x = x;
     pose_msg.pose.position.y = y;
-    pose_msg.pose.position.z = 0.0;
-    pose_msg.pose.orientation.w = 1.0;  // Set default orientation (facing forward)
+    pose_msg.pose.position.z = z;
+    pose_msg.pose.orientation.x = qx;
+    pose_msg.pose.orientation.y = qy;
+    pose_msg.pose.orientation.z = qz;
+    pose_msg.pose.orientation.w = qw;
 
     goal_msg.pose = pose_msg;
 
@@ -81,9 +124,6 @@ protected:
   virtual std::string
   generate_feedback(const typename nav2_msgs::action::NavigateToPose::Feedback::ConstSharedPtr msg) override
   {
-    // std::string feedback = "x: " + std::to_string(msg->current_pose.pose.position.x) +
-    //                        " y: " + std::to_string(msg->current_pose.pose.position.y);
-    // return feedback;
     return "";
   }
 
