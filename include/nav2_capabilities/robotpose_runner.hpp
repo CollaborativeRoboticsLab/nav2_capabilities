@@ -59,22 +59,11 @@ public:
     std::string bond_id = ThreadTriggerRunner::bond_from_thread_id(thread_id);
     std::string trigger_id = ThreadTriggerRunner::trigger_from_thread_id(thread_id);
 
-    std::string map = "map", odom = "odom", robot = "base_link";
+    std::string map, odom, robot;
 
-    if (parameters.has_value("map"))
-      map = std::any_cast<std::string>(parameters.get_value("map"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: map, defaulting to 'map'");
-
-    if (parameters.has_value("odom"))
-      odom = std::any_cast<std::string>(parameters.get_value("odom"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: odom, defaulting to 'odom'");
-
-    if (parameters.has_value("robot"))
-      robot = std::any_cast<std::string>(parameters.get_value("robot"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: robot, defaulting to 'base_link'");
+    map = std::any_cast<std::string>(parameters.get_value("map", "map"));
+    odom = std::any_cast<std::string>(parameters.get_value("odom", "odom"));
+    robot = std::any_cast<std::string>(parameters.get_value("robot", "base_link"));
 
     RCLCPP_INFO(node_->get_logger(), "Transforming from %s to %s or %s to %s", map.c_str(), robot.c_str(), odom.c_str(),
                 robot.c_str());

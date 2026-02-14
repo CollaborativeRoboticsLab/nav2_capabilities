@@ -54,43 +54,15 @@ protected:
   virtual nav2_msgs::action::NavigateToPose::Goal
   generate_goal(capabilities2_events::EventParameters& parameters) override
   {
-    double x, y, z, qx, qy, qz = 0.0;
-    double qw = 1.0;  // default value for qw
+    double x, y, z, qx, qy, qz, qw;
 
-    if (parameters.has_value("x"))
-      x = std::any_cast<double>(parameters.get_value("x"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: x, defaulting to 0.0");
-
-    if (parameters.has_value("y"))
-      y = std::any_cast<double>(parameters.get_value("y"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: y, defaulting to 0.0");
-
-    if (parameters.has_value("z"))
-      z = std::any_cast<double>(parameters.get_value("z"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: z, defaulting to 0.0");
-
-    if (parameters.has_value("qx"))
-      qx = std::any_cast<double>(parameters.get_value("qx"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: qx, defaulting to 0.0");
-
-    if (parameters.has_value("qy"))
-      qy = std::any_cast<double>(parameters.get_value("qy"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: qy, defaulting to 0.0");
-    
-    if (parameters.has_value("qz"))
-      qz = std::any_cast<double>(parameters.get_value("qz"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: qz, defaulting to 0.0");
-
-    if (parameters.has_value("qw"))
-      qw = std::any_cast<double>(parameters.get_value("qw"));
-    else
-      RCLCPP_WARN(node_->get_logger(), "missing parameter: qw, defaulting to 1.0");
+    x = std::any_cast<double>(parameters.get_value("x", 0.0, capabilities2_events::OptionType::DOUBLE));
+    y = std::any_cast<double>(parameters.get_value("y", 0.0, capabilities2_events::OptionType::DOUBLE));
+    z = std::any_cast<double>(parameters.get_value("z", 0.0, capabilities2_events::OptionType::DOUBLE));
+    qx = std::any_cast<double>(parameters.get_value("qx", 0.0, capabilities2_events::OptionType::DOUBLE));
+    qy = std::any_cast<double>(parameters.get_value("qy", 0.0, capabilities2_events::OptionType::DOUBLE));
+    qz = std::any_cast<double>(parameters.get_value("qz", 0.0, capabilities2_events::OptionType::DOUBLE));
+    qw = std::any_cast<double>(parameters.get_value("qw", 1.0, capabilities2_events::OptionType::DOUBLE));
 
     RCLCPP_INFO(node_->get_logger(), "goal consist of x: %f, y: %f, z: %f, qx: %f, qy: %f, qz: %f, qw: %f", x, y, z, qx,
                 qy, qz, qw);
