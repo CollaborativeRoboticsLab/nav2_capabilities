@@ -56,13 +56,13 @@ protected:
   {
     double x, y, z, qx, qy, qz, qw;
 
-    x = std::any_cast<double>(parameters.get_value("x", 0.0, capabilities2_events::OptionType::DOUBLE));
-    y = std::any_cast<double>(parameters.get_value("y", 0.0, capabilities2_events::OptionType::DOUBLE));
-    z = std::any_cast<double>(parameters.get_value("z", 0.0, capabilities2_events::OptionType::DOUBLE));
-    qx = std::any_cast<double>(parameters.get_value("qx", 0.0, capabilities2_events::OptionType::DOUBLE));
-    qy = std::any_cast<double>(parameters.get_value("qy", 0.0, capabilities2_events::OptionType::DOUBLE));
-    qz = std::any_cast<double>(parameters.get_value("qz", 0.0, capabilities2_events::OptionType::DOUBLE));
-    qw = std::any_cast<double>(parameters.get_value("qw", 1.0, capabilities2_events::OptionType::DOUBLE));
+    x = std::any_cast<double>(parameters.get_value("x", 0.0));
+    y = std::any_cast<double>(parameters.get_value("y", 0.0));
+    z = std::any_cast<double>(parameters.get_value("z", 0.0));
+    qx = std::any_cast<double>(parameters.get_value("qx", 0.0));
+    qy = std::any_cast<double>(parameters.get_value("qy", 0.0));
+    qz = std::any_cast<double>(parameters.get_value("qz", 0.0));
+    qw = std::any_cast<double>(parameters.get_value("qw", 1.0));
 
     RCLCPP_INFO(node_->get_logger(), "goal consist of x: %f, y: %f, z: %f, qx: %f, qy: %f, qz: %f, qw: %f", x, y, z, qx,
                 qy, qz, qw);
