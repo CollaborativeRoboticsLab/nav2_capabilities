@@ -41,7 +41,7 @@ public:
     init_action(node, run_config, "/navigate_to_pose");
 
     // emit start event
-    emit_started(bond_id, param_on_started());
+    emit_started(bond_id, "", param_on_started());
   }
 
 protected:
