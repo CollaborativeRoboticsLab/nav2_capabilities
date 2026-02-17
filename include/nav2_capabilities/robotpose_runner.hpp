@@ -61,9 +61,9 @@ public:
 
     std::string map, odom, robot;
 
-    map = std::any_cast<std::string>(parameters.get_value("map", "map"));
-    odom = std::any_cast<std::string>(parameters.get_value("odom", "odom"));
-    robot = std::any_cast<std::string>(parameters.get_value("robot", "base_link"));
+    map = std::any_cast<std::string>(parameters.get_value("map", std::string("map")));
+    odom = std::any_cast<std::string>(parameters.get_value("odom", std::string("odom")));
+    robot = std::any_cast<std::string>(parameters.get_value("robot", std::string("base_link")));
 
     RCLCPP_INFO(node_->get_logger(), "Transforming from %s to %s or %s to %s", map.c_str(), robot.c_str(), odom.c_str(),
                 robot.c_str());
@@ -76,7 +76,7 @@ public:
       // trigger the events related to on_success state
       emit_succeeded(bond_id, instance_id, param_on_success());
 
-      RCLCPP_INFO(node_->get_logger(), "Transformation received. Thread closing for instance %s", instance_id.c_str());
+      RCLCPP_INFO(node_->get_logger(), "Transformation received from %s to %s. Thread closing for instance %s", map.c_str(), robot.c_str(), instance_id.c_str());
       return;
     }
     catch (tf2::TransformException& ex)
@@ -92,11 +92,11 @@ public:
       // trigger the events related to on_success state
       emit_succeeded(bond_id, instance_id, param_on_success());
 
-      RCLCPP_INFO(node_->get_logger(), "Transformation received. Thread closing for instance %s", instance_id.c_str());
+      RCLCPP_INFO(node_->get_logger(), "Transformation received from %s to %s. Thread closing for instance %s", odom.c_str(), robot.c_str(), instance_id.c_str());
     }
     catch (tf2::TransformException& ex)
     {
-      RCLCPP_INFO(node_->get_logger(), "Could not transform from odom to robot: %s", ex.what());
+      RCLCPP_INFO(node_->get_logger(), "Could not transform from %s to %s: %s", odom.c_str(), robot.c_str(), ex.what());
 
       // trigger the events related to on_failure state
       emit_failed(bond_id, instance_id, param_on_failure());
@@ -146,6 +146,11 @@ protected:
     parameters.set_value("qy", transform_.transform.rotation.y, capabilities2_events::OptionType::DOUBLE);
     parameters.set_value("qz", transform_.transform.rotation.z, capabilities2_events::OptionType::DOUBLE);
     parameters.set_value("qw", transform_.transform.rotation.w, capabilities2_events::OptionType::DOUBLE);
+
+    RCLCPP_INFO(node_->get_logger(), "Emitting param_on_success with x: %f, y: %f, z: %f, qx: %f, qy: %f, qz: %f, qw: %f",
+                transform_.transform.translation.x, transform_.transform.translation.y, transform_.transform.translation.z,
+                transform_.transform.rotation.x, transform_.transform.rotation.y, transform_.transform.rotation.z,
+                transform_.transform.rotation.w);
 
     return parameters;
   };
