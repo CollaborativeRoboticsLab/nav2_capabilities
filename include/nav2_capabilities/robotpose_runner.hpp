@@ -64,6 +64,7 @@ public:
     map = std::any_cast<std::string>(parameters.get_value("map", std::string("map")));
     odom = std::any_cast<std::string>(parameters.get_value("odom", std::string("odom")));
     robot = std::any_cast<std::string>(parameters.get_value("robot", std::string("base_link")));
+    time_buffer_sec_ = std::any_cast<double>(parameters.get_value("time_buffer", time_buffer_sec_));
 
     RCLCPP_INFO(node_->get_logger(), "Transforming from %s to %s or %s to %s", map.c_str(), robot.c_str(), odom.c_str(),
                 robot.c_str());
@@ -71,7 +72,7 @@ public:
     // Try to use map -> robot first
     try
     {
-      transform_ = tf_buffer_->lookupTransform(map, robot, tf2::TimePointZero);
+      transform_ = tf_buffer_->lookupTransform(map, robot, tf2::TimePointZero, tf2::durationFromSec(time_buffer_sec_));
 
       // trigger the events related to on_success state
       emit_succeeded(bond_id, instance_id, param_on_success());
@@ -87,7 +88,7 @@ public:
     // Fall back to odom -> robot
     try
     {
-      transform_ = tf_buffer_->lookupTransform(odom, robot, tf2::TimePointZero);
+      transform_ = tf_buffer_->lookupTransform(odom, robot, tf2::TimePointZero, tf2::durationFromSec(time_buffer_sec_));
 
       // trigger the events related to on_success state
       emit_succeeded(bond_id, instance_id, param_on_success());
@@ -158,5 +159,6 @@ protected:
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_{ nullptr };
   std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
   geometry_msgs::msg::TransformStamped transform_;
+  double time_buffer_sec_{ 5.0 };
 };
 }  // namespace capabilities2_runner
