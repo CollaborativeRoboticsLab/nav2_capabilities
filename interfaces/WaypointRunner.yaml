@@ -6,10 +6,10 @@ spec_type: interface
 description: "This capability depends on the navigation stack functionalities and allow the robot to navigate to a location given 
               by two dimensional coordinates. This capability can be used by the decision making authority such as an LLM to move 
               the robot to a required position and orientation. This capability can be triggered via the xml command
-              '<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='$value' y='$value' />'. 
+              '<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='$value' y='$value' z='$value' qx='$value' qy='$value' qz='$value' qw='$value' />'. 
               '$value' represents a value in meters. As an example 
-              '<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='1.2' y='0.8' /> means the 
-              robot will move 1.2 meters forward and 0.8 meters to the right side. capability nav2_capabilities/RobotPoseRunner and
+              '<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='1.2' y='0.8' z='0.0' qx='0.0' qy='0.0' qz='0.0' qw='1.0' /> means the 
+              robot will move 1.2 meters forward and 0.8 meters to the right side and face the specified orientation. The capability nav2_capabilities/RobotPoseRunner and
               nav2_capabilities/PromptPoseRunner can be used to get the feedback on the position of the robot and by that, whether 
               the robot has reached the position or not."
 interface:
