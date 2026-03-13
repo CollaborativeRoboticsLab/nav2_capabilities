@@ -14,9 +14,7 @@ Provides runners for Nav2 stack.
 
 Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. Following examples have been tested against turtlebot3 simulation using [CollaborativeRoboticsLab/turtlebot3-docker](https://github.com/CollaborativeRoboticsLab/turtlebot3-docker)
 
-## Navigation
-
-| &nbsp; Example &nbsp; | Description |
+| Example | Description |
 | ---     | ---         |
 | [Example 1](./docs/example1.md) | Implements the basic fabric triggering that moves the robot from one point to another. |
 | [Example 2](./docs/example2.md) | Implements navigating through 5 points using 'sequential' control functionality. |
