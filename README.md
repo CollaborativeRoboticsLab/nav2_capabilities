@@ -16,10 +16,11 @@ Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/C
 
 | Example | Description |
 | ---     | ---         |
-| [Example 1](./docs/example1.md) | Implements the basic fabric triggering that moves the robot from one point to another. |
-| [Example 2](./docs/example2.md) | Implements navigating through 5 points using 'sequential' control functionality. |
-| [Example 3](./docs/example3.md) | Implements navigating through 5 points inluding 1 inaccessible point (1 recovery point) using `sequential` and `recovery` control functionality. |
-| [Example 4](./docs/example4.md) | Implements navigating through 5 points inluding 4 inaccessible point (4 recovery point) using `sequential` and `recovery` control functionality. |
+| [navigation_1.xml](./plans/navigation_1.xml) | In this example (0.5,2) point is reachable. And the robot moves to that point. |
+| [navigation_2.xml](./plans/navigation_2.xml) | In this example, (0.5,2) (1,2) (2,0.5) (-2,0) points are reachable. And the robot moves through those points. |
+| [navigation_3.xml](./plans/navigation_3.xml) | In this example, (0.5,2) (1,2) (-2,0) are reachable, (2,-3) point is not reachable. Because of this, the robot moves to the (0,0.5) as a recovery action. |
+| [navigation_4.xml](./plans/navigation_4.xml) | In this example, (0.5,2) (1,2) (2,1) are reachable, (2,-3), (0, -3) points are not reachable.Because of this, the robot moves to the (0,0.5) as a recovery action. (1,2) (2,1) points also have recovery actions linked, but they are not triggered as the point is accessible.
+ |
 
 To run the examples, first make sure that the simulation is running and then on seperate terminals run,
 
@@ -32,3 +33,5 @@ ros2 launch capabilities2_server capabilities2_server.launch.py
 source install/setup.bash
 ros2 launch nav2_capabilities system.launch.py filename:=navigation_1.xml
 ```
+
+Change `filename:=navigation_1.xml` to match the correct plan
