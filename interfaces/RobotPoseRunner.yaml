@@ -10,12 +10,7 @@ description: "This capability depends on the navigation stack functionalities an
               Upon the successful execution of this capability, another capability that allows robot pose prompting needs to be triggered 
               for transfer of robot pose data to the decision making authority for future decision making. 
               '<Runner interface=nav2_capabilities/PromptPoseRunner provider=nav2_capabilities/PromptPoseRunner  />' can be used 
-              as an robot pose prompting capability for this. Data structure used follows the same structure as geometry_msgs::msg::Pose 
-              and is as follows
-                  ' <Pose>
-                        <position x=1.23 y=4.56 z=7.89/>
-                        <orientation x=0.12 y=0.34 z=0.56 w=0.78/>
-                    </Pose>' "
+              as an robot pose prompting capability for this."
 interface:
   topics:
     "/pose":
