@@ -9,7 +9,7 @@ description: "This capability depends on the navigation stack functionalities an
               '<Runner interface=nav2_capabilities/RobotPoseRunner provider=nav2_capabilities/RobotPoseRunner  map=map odom=odom robot=base_link/>'.  
               Upon the successful execution of this capability, another capability that allows robot pose prompting needs to be triggered 
               for transfer of robot pose data to the decision making authority for future decision making. 
-              '<Runner interface=nav2_capabilities/PromptPoseRunner provider=nav2_capabilities/PromptPoseRunner  />' can be used 
+              '<Runner interface=prompt_capabilities/PromptPoseRunner provider=prompt_capabilities/PromptPoseRunner  />' can be used 
               as an robot pose prompting capability for this."
 interface:
   topics:
