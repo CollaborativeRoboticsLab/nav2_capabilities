@@ -9,6 +9,8 @@ Provides capabilities2 runners for Nav2 stack. These runners utilize the action 
 | waypoint runner       | Navigation | utilizes follow_waypoint action from nav2 stack |
 | robot pose runner     | Navigation | extracts robots pose based on odom and tf2  |
 
+For information about these runners' interfaces, please refer to [Interface Information](./docs/interface.md) section.
+
 ## Examples
 
 Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. Following examples have been tested against turtlebot3 simulation using [CollaborativeRoboticsLab/turtlebot3-docker](https://github.com/CollaborativeRoboticsLab/turtlebot3-docker)
