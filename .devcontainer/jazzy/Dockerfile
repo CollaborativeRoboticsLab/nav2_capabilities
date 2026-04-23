@@ -34,3 +34,12 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 WORKDIR /home/ubuntu/colcon_ws/src
 
 RUN git clone https://github.com/CollaborativeRoboticsLab/capabilities2.git -b develop
+# RUN git clone https://github.com/CollaborativeRoboticsLab/fabric.git
+# RUN git clone https://github.com/CollaborativeRoboticsLab/fabric_capabilities.git
+# RUN git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/prompt_tools.git
+# RUN git clone https://github.com/CollaborativeRoboticsLab/prompt_capabilities.git
+
+# git clone https://github.com/CollaborativeRoboticsLab/fabric.git
+# git clone https://github.com/CollaborativeRoboticsLab/fabric_capabilities.git
+# git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/prompt_tools.git
+# git clone https://github.com/CollaborativeRoboticsLab/prompt_capabilities.git
