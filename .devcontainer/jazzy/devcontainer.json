@@ -1,5 +1,5 @@
 {
-  "name": "capabilities2 jazzy base",
+  "name": "Jazzy base",
   "dockerFile": "Dockerfile",
   "remoteUser": "ubuntu",
   "runArgs": [
