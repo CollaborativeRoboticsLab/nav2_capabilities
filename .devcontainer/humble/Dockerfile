@@ -40,7 +40,7 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/capabilities2.git -b d
 # RUN git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/prompt_tools.git
 # RUN git clone https://github.com/CollaborativeRoboticsLab/prompt_capabilities.git
 
-# git clone https://github.com/CollaborativeRoboticsLab/fabric.git
-# git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/prompt_tools.git
-# git clone https://github.com/CollaborativeRoboticsLab/prompt_capabilities.git
-# git clone https://github.com/CollaborativeRoboticsLab/fabric_capabilities.git
+git clone https://github.com/CollaborativeRoboticsLab/fabric.git
+git clone https://github.com/CollaborativeRoboticsLab/fabric_capabilities.git
+git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/prompt_tools.git
+git clone https://github.com/CollaborativeRoboticsLab/prompt_capabilities.git
