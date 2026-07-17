@@ -11,6 +11,7 @@ Input Parameters:
 | map               | string | Frame id of the map |
 | odom              | string | Frame id of the odometry |
 | robot             | string | Frame id of the robot |
+| time_buffer       | double | TF lookup timeout in seconds before the runner reports failure |
 
 Output Parameters:
 
