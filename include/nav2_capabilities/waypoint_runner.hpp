@@ -38,7 +38,7 @@ public:
    */
   virtual void start(rclcpp::Node::SharedPtr node, const runner_opts& run_config, const std::string& bond_id) override
   {
-    init_action(node, run_config, "/navigate_to_pose");
+    init_action(node, run_config, "/navigate_to_pose", "nav2_msgs::action::NavigateToPose");
 
     // emit start event
     emit_started(bond_id, "", param_on_started());

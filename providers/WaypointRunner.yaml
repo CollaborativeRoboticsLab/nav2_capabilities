@@ -3,7 +3,49 @@
 ---
 name: WaypointRunner
 spec_type: provider
-spec_version: 1.1
-description: "The capability provider for the follow_waypoint interface"
+spec_version: 1.2
+description: "The provider for navigation requests that move the robot to a target pose in the map frame."
 implements: nav2_capabilities/WaypointRunner
-runner: capabilities2_runner::WayPointRunner
+runner: capabilities2_runner::WaypointRunner
+
+definition:
+  command: "<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='$x' y='$y' z='$z' qx='$qx' qy='$qy' qz='$qz' qw='$qw' />"
+  configuration_parameters:
+    - name: x
+      type: double
+      semantic_key: nav2.waypoint.x
+      description: "The target x position, in meters, in the map frame."
+    - name: y
+      type: double
+      semantic_key: nav2.waypoint.y
+      description: "The target y position, in meters, in the map frame."
+    - name: z
+      type: double
+      optional: true
+      default: 0.0
+      semantic_key: nav2.waypoint.z
+      description: "The target z position, which defaults to zero for planar navigation."
+    - name: qx
+      type: double
+      optional: true
+      default: 0.0
+      semantic_key: nav2.waypoint.qx
+      description: "The x component of the target orientation quaternion."
+    - name: qy
+      type: double
+      optional: true
+      default: 0.0
+      semantic_key: nav2.waypoint.qy
+      description: "The y component of the target orientation quaternion."
+    - name: qz
+      type: double
+      optional: true
+      default: 0.0
+      semantic_key: nav2.waypoint.qz
+      description: "The z component of the target orientation quaternion."
+    - name: qw
+      type: double
+      optional: true
+      default: 1.0
+      semantic_key: nav2.waypoint.qw
+      description: "The w component of the target orientation quaternion."

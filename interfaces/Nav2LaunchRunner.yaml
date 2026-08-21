@@ -1,10 +1,11 @@
 %YAML 1.1
 ---
 name: Nav2LaunchRunner
-spec_version: 1.1
+spec_version: 1.2
 spec_type: interface
-description: "This capability impliments the basic navigation stack and is a dependency for other capabilities that depend 
-              on navigation stack functionalities."
+description: "This capability launches the navigation stack and serves as a core dependency for
+              other capabilities that require Nav2 resources such as transforms, planners, and
+              action servers."
 interface:
   topics:
     "goal":

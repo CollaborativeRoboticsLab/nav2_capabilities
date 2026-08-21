@@ -3,7 +3,7 @@
 ---
 name: Nav2LaunchRunner
 spec_type: provider
-spec_version: 1.1
-description: "The capability provider for the nav2 stack"
+spec_version: 1.2
+description: "The provider that launches the Nav2 stack used by navigation-related capabilities."
 implements: nav2_capabilities/Nav2LaunchRunner
 runner: nav_stack/system.launch.py

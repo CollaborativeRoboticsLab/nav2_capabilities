@@ -2,7 +2,65 @@
 ---
 name: RobotPoseRunner
 spec_type: provider
-spec_version: 1.1
-description: "The capability provider for the robot's odometry interface"
+spec_version: 1.2
+description: "The provider for extracting the robot pose from TF transforms exposed by the navigation stack."
 implements: nav2_capabilities/RobotPoseRunner
 runner: capabilities2_runner::RobotPoseRunner
+
+definition:
+  command: "<Runner interface=nav2_capabilities/RobotPoseRunner provider=nav2_capabilities/RobotPoseRunner map='$map' odom='$odom' robot='$robot' time_buffer='$time_buffer' />"
+  configuration_parameters:
+    - name: map
+      type: string
+      optional: true
+      default: "map"
+      semantic_key: nav2.robot_pose.map
+      description: "The global frame to try first when resolving the robot pose transform."
+    - name: odom
+      type: string
+      optional: true
+      default: "odom"
+      semantic_key: nav2.robot_pose.odom
+      description: "The fallback odometry frame to use if the map transform is unavailable."
+    - name: robot
+      type: string
+      optional: true
+      default: "base_link"
+      semantic_key: nav2.robot_pose.robot
+      description: "The robot base frame whose pose should be resolved."
+    - name: time_buffer
+      type: double
+      optional: true
+      default: 5.0
+      semantic_key: nav2.robot_pose.time_buffer
+      description: "The TF lookup timeout, in seconds, allowed for resolving the requested transform."
+  runtime_parameters:
+    output:
+      - name: x
+        type: double
+        semantic_key: nav2.robot_pose.x
+        description: "The x position of the robot in the resolved frame."
+      - name: y
+        type: double
+        semantic_key: nav2.robot_pose.y
+        description: "The y position of the robot in the resolved frame."
+      - name: z
+        type: double
+        semantic_key: nav2.robot_pose.z
+        description: "The z position of the robot in the resolved frame."
+      - name: qx
+        type: double
+        semantic_key: nav2.robot_pose.qx
+        description: "The x component of the robot orientation quaternion."
+      - name: qy
+        type: double
+        semantic_key: nav2.robot_pose.qy
+        description: "The y component of the robot orientation quaternion."
+      - name: qz
+        type: double
+        semantic_key: nav2.robot_pose.qz
+        description: "The z component of the robot orientation quaternion."
+      - name: qw
+        type: double
+        semantic_key: nav2.robot_pose.qw
+        description: "The w component of the robot orientation quaternion."
