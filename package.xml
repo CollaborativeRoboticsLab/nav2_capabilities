@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>nav2_capabilities</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <version>0.1.0</version>
+  <description>Provides capabilities2 runners for the Nav2 stack.</description>
 
   <maintainer email="kalanaratnayake95@gmail.com">Kalana Ratnayake</maintainer>
   <maintainer email="kalana.ratnayakemudiyanselage@canberra.edu.au">Kalana Ratnayake</maintainer>
 
   <author email="kalana.ratnayakemudiyanselage@canberra.edu.au">Kalana Ratnayake</author>
+  <author email="kalanaratnayake95@gmail.com">Kalana Ratnayake</author>
   
   <license>MIT</license>
 
