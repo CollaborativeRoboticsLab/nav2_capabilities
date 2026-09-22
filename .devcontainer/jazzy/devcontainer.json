@@ -2,7 +2,11 @@
   "name": "Jazzy base",
   "dockerFile": "Dockerfile",
   "remoteUser": "ubuntu",
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
   "runArgs": [
+    "--privileged",
     "--network=host"
   ],
   "workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/colcon_ws/src/${localWorkspaceFolderBasename},type=bind",
