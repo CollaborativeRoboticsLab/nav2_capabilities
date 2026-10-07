@@ -22,10 +22,10 @@ namespace capabilities2_runner
  * Class to run waypointfollower action based capability
  *
  */
-class WayPointRunner : public ActionRunner<nav2_msgs::action::NavigateToPose>
+class WaypointRunner : public ActionRunner<nav2_msgs::action::NavigateToPose>
 {
 public:
-  WayPointRunner() : ActionRunner()
+  WaypointRunner() : ActionRunner()
   {
   }
 
