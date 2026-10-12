@@ -51,13 +51,13 @@
     </capability_provider>
 
     <!-- Nav2LaunchRunner -->
-    <!-- <capability_interface>
+    <capability_interface>
       interfaces/Nav2LaunchRunner.yaml
-    </capability_interface> -->
+    </capability_interface>
 
-    <!-- <capability_provider>
+    <capability_provider>
       providers/Nav2LaunchRunner.yaml
-    </capability_provider> -->
+    </capability_provider>
 
 
   </export>

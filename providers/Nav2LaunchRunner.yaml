@@ -6,4 +6,4 @@ spec_type: provider
 spec_version: 1.2
 description: "The provider that launches the Nav2 stack used by navigation-related capabilities."
 implements: nav2_capabilities/Nav2LaunchRunner
-runner: nav_stack/system.launch.py
+runner: nav2_capabilities/system.launch.py

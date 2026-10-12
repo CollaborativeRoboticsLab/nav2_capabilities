@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include <rclcpp/rclcpp.hpp>
 
 #include "tf2/exceptions.h"
@@ -61,9 +63,9 @@ public:
 
     std::string map, odom, robot;
 
-    map = std::any_cast<std::string>(parameters.get_value("map", std::string("map")));
-    odom = std::any_cast<std::string>(parameters.get_value("odom", std::string("odom")));
-    robot = std::any_cast<std::string>(parameters.get_value("robot", std::string("base_link")));
+    map = qualify_frame(std::any_cast<std::string>(parameters.get_value("map", std::string("map"))));
+    odom = qualify_frame(std::any_cast<std::string>(parameters.get_value("odom", std::string("odom"))));
+    robot = qualify_frame(std::any_cast<std::string>(parameters.get_value("robot", std::string("base_link"))));
     time_buffer_sec_ = std::any_cast<double>(parameters.get_value("time_buffer", time_buffer_sec_));
 
     RCLCPP_INFO(node_->get_logger(), "Transforming from %s to %s or %s to %s", map.c_str(), robot.c_str(), odom.c_str(),
@@ -129,6 +131,62 @@ public:
   }
 
 protected:
+  std::string qualify_frame(const std::string& frame) const
+  {
+    if (frame.empty())
+    {
+      return frame;
+    }
+
+    const std::string frame_without_leading_slash = strip_leading_slash(frame);
+    if (run_config_.global_namespace.empty())
+    {
+      return frame_without_leading_slash;
+    }
+
+    const std::string normalized_namespace = strip_slashes(run_config_.global_namespace);
+    if (normalized_namespace.empty())
+    {
+      return frame_without_leading_slash;
+    }
+
+    const std::string namespace_prefix = normalized_namespace + "/";
+    if (frame_without_leading_slash == normalized_namespace ||
+        frame_without_leading_slash.rfind(namespace_prefix, 0) == 0)
+    {
+      return "/" + frame_without_leading_slash;
+    }
+
+    if (frame_without_leading_slash.find('/') != std::string::npos)
+    {
+      return "/" + frame_without_leading_slash;
+    }
+
+    return "/" + normalized_namespace + "/" + frame_without_leading_slash;
+  }
+
+  static std::string strip_leading_slash(const std::string& value)
+  {
+    if (!value.empty() && value.front() == '/')
+    {
+      return value.substr(1);
+    }
+
+    return value;
+  }
+
+  static std::string strip_slashes(const std::string& value)
+  {
+    const auto first = value.find_first_not_of('/');
+    if (first == std::string::npos)
+    {
+      return "";
+    }
+
+    const auto last = value.find_last_not_of('/');
+    return value.substr(first, last - first + 1);
+  }
+
   /**
    * @brief Update on_success event parameters with new data if avaible.
    *
