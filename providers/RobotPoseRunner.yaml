@@ -6,6 +6,9 @@ spec_version: 1.2
 description: "The provider for extracting the robot pose from TF transforms exposed by the navigation stack."
 implements: nav2_capabilities/RobotPoseRunner
 runner: capabilities2_runner::RobotPoseRunner
+depends_on:
+  "nav2_capabilities/Nav2LaunchRunner":
+    provider: "nav2_capabilities/Nav2LaunchRunner"
 
 definition:
   command: "<Runner interface=nav2_capabilities/RobotPoseRunner provider=nav2_capabilities/RobotPoseRunner map='$map' odom='$odom' robot='$robot' time_buffer='$time_buffer' />"

@@ -7,3 +7,8 @@ description: "This capability depends on the navigation stack functionalities an
               the pose of the robot from TF transforms. It first attempts to resolve the transform from map 
               to the robot frame and falls back to odom to robot if needed. This extracted  robot pose can 
               be used by a planning entity to understand the position and orientation of the robot."
+
+relations:
+  - subject: nav2_capabilities/WaypointRunner
+    predicate: depends_on
+    object: nav2_capabilities/Nav2LaunchRunner

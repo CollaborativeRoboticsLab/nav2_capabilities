@@ -7,6 +7,9 @@ spec_version: 1.2
 description: "The provider for navigation requests that move the robot to a target pose in the map frame."
 implements: nav2_capabilities/WaypointRunner
 runner: capabilities2_runner::WaypointRunner
+depends_on:
+  "nav2_capabilities/Nav2LaunchRunner":
+    provider: "nav2_capabilities/Nav2LaunchRunner"
 
 definition:
   command: "<Runner interface=nav2_capabilities/WaypointRunner provider=nav2_capabilities/WaypointRunner x='$x' y='$y' z='$z' qx='$qx' qy='$qy' qz='$qz' qw='$qw' />"

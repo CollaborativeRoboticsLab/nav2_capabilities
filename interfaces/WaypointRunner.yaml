@@ -12,3 +12,8 @@ interface:
     "/navigate_to_pose":
       type: "nav2_msgs::action::NavigateToPose"
       description: "Waypoint follower interface of the Nav2 stack"
+
+relations:
+  - subject: nav2_capabilities/WaypointRunner
+    predicate: depends_on
+    object: nav2_capabilities/Nav2LaunchRunner
