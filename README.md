@@ -13,7 +13,10 @@ For information about these runners' interfaces, please refer to [Interface Info
 
 ## Examples
 
-Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. Following examples have been tested against turtlebot3 simulation using [CollaborativeRoboticsLab/turtlebot3-docker](https://github.com/CollaborativeRoboticsLab/turtlebot3-docker)
+Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. These examples and launch files are generic examples for any robot that has a navigation stack running.
+
+But for best functionality, its recommended to use a robot-specific navigation stack based launch runner and semantic interfaces customized for that robot. For example, if you are using turtlebot4, you can use the [CollaborativeRoboticsLab/turtlebot_capabilities](https://github.com/CollaborativeRoboticsLab/turtlebot_capabilities) which is specialized for turtlebot4 stack.
+
 
 | Example | Description |
 | ---     | ---         |
@@ -22,7 +25,8 @@ Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/C
 | [navigation_3.xml](./plans/navigation_3.xml) | In this example, (0.5,2) (1,2) (-2,0) are reachable, (2,-3) point is not reachable. Because of this, the robot moves to the (0,0.5) as a recovery action. |
 | [navigation_4.xml](./plans/navigation_4.xml) | In this example, (0.5,2) (1,2) (2,1) are reachable, (2,-3), (0, -3) points are not reachable.Because of this, the robot moves to the (0,0.5) as a recovery action. (1,2) (2,1) points also have recovery actions linked, but they are not triggered as the point is accessible. |
 
-> Note: The examples are designed to work and has been tested with the turtlebot3 world in Gazebo, but on the assumption that the start position of the robot is (0.0, 0.5) in gazebo simulation. In ROS `humble` this is the default, but in `jazzy` you might need to change the initial position of the robot in the world file to match this. If you use [CollaborativeRoboticsLab/turtlebot3-docker](https://github.com/CollaborativeRoboticsLab/turtlebot3-docker), it is already set to this position.
+
+> Note: The examples are has been tested with the turtlebot3 world in Gazebo, but on the assumption that the start position of the robot is (0.0, 0.5) in gazebo simulation. In ROS `humble` this is the default, but in `jazzy` you might need to change the initial position of the robot in the world file to match this. If you use [CollaborativeRoboticsLab/turtlebot3-docker](https://github.com/CollaborativeRoboticsLab/turtlebot3-docker), it is already set to this position.
 
 ## Setup
 
