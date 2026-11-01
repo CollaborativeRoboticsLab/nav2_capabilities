@@ -10,10 +10,10 @@ runner: nav2_capabilities/nav2.launch.py
 definition:
   launch_parameters:
     - key: use_sim_time
-      value: "false"
+      value: "False"
     - key: autostart
-      value: "true"
+      value: "True"
     - key: use_localization
-      value: "true"
+      value: "True"
     - key: use_composition
       value: "True"
