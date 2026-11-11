@@ -30,6 +30,13 @@ But for best functionality, its recommended to use a robot-specific navigation s
 
 ## Setup
 
+## Capability inheritance
+
+```mermaid
+flowchart LR
+	N["nav2_capabilities<br/>Generic Nav2 interfaces and launch API"]
+```
+
 Above examples depend on the capabilities2 and prompt_tools packages. You can clone these packages in your workspace and build them using colcon build.
 
 ```bash
