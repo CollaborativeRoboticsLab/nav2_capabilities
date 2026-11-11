@@ -13,7 +13,7 @@ For information about these runners' interfaces, please refer to [Interface Info
 
 ## Examples
 
-Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. These examples and launch files are generic examples for any robot that has a navigation stack running.
+Examples depend on [CollaborativeRoboticsLab/capabilities2](https://github.com/CollaborativeRoboticsLab/capabilities2) and Navigation Stack. The `Nav2LaunchRunner` provider starts Nav2 as an on-demand dependency of waypoint and robot-pose runners, and waits for the navigation lifecycle nodes and action server. Ensure the robot or simulation, sensors, map, and robot-specific parameters are configured before running a plan. Do not start a second Nav2 instance for the same robot.
 
 But for best functionality, its recommended to use a robot-specific navigation stack based launch runner and semantic interfaces customized for that robot. For example, if you are using turtlebot4, you can use the [CollaborativeRoboticsLab/turtlebot_capabilities](https://github.com/CollaborativeRoboticsLab/turtlebot_capabilities) which is specialized for turtlebot4 stack.
 
@@ -53,12 +53,7 @@ docker compose up
 ```
 
 ## Running the examples
-To run the examples, first make sure that the simulation is running and then on seperate terminals run,
-
-```bash
-source install/setup.bash
-ros2 launch capabilities2_server capabilities2_server.launch.py
-```
+To run the examples, first start the robot or simulation. The system wrapper starts Fabric and Capabilities2; the waypoint plan then starts its Nav2 launch dependency automatically.
 
 ```bash
 source install/setup.bash

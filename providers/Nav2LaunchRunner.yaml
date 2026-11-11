@@ -17,3 +17,11 @@ definition:
       value: "True"
     - key: use_composition
       value: "True"
+  launch_readiness:
+    lifecycle:
+      nodes: [planner_server, bt_navigator]
+      timeout_sec: 60.0
+    action:
+      name: navigate_to_pose
+      type: nav2_msgs/action/NavigateToPose
+      timeout: 60.0
