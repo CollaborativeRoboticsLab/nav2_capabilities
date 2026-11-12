@@ -2,7 +2,9 @@
 #include <capabilities2_runner/runner_base.hpp>
 #include <nav2_capabilities/waypoint_runner.hpp>
 #include <nav2_capabilities/robotpose_runner.hpp>
+#include <nav2_capabilities/undocking_runner.hpp>
 
 // register runner plugins
 PLUGINLIB_EXPORT_CLASS(capabilities2_runner::WaypointRunner, capabilities2_runner::RunnerBase)
 PLUGINLIB_EXPORT_CLASS(capabilities2_runner::RobotPoseRunner, capabilities2_runner::RunnerBase)
+PLUGINLIB_EXPORT_CLASS(capabilities2_runner::UndockingRunner, capabilities2_runner::RunnerBase)

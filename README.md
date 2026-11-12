@@ -8,6 +8,7 @@ Provides capabilities2 runners for Nav2 stack. These runners utilize the action 
 | ---                   | ---        | ---          |
 | waypoint runner       | Navigation | utilizes follow_waypoint action from nav2 stack |
 | robot pose runner     | Navigation | extracts robots pose based on odom and tf2  |
+| undocking runner      | Docking    | sends an UndockRobot goal to an existing action server |
 
 For information about these runners' interfaces, please refer to [Interface Information](./docs/interface.md) section.
 

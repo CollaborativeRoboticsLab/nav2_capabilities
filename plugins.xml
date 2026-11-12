@@ -9,4 +9,9 @@
             A plugin that provide nav2 waypoint navigation capability
         </description>
     </class>
+    <class type="capabilities2_runner::UndockingRunner" base_class_type="capabilities2_runner::RunnerBase">
+        <description>
+            A plugin that provides the Nav2 undocking capability
+        </description>
+    </class>
 </library>

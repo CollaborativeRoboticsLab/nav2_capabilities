@@ -72,6 +72,21 @@ install(DIRECTORY plans
   DESTINATION share/${PROJECT_NAME}
 )
 
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(undocking_runner_test test/test_undocking_runner.cpp)
+  if(TARGET undocking_runner_test)
+    ament_target_dependencies(undocking_runner_test
+      rclcpp
+      rclcpp_action
+      nav2_msgs
+      capabilities2_msgs
+      capabilities2_runner
+      capabilities2_events
+    )
+  endif()
+endif()
+
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 

@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+name: UndockingRunner
+spec_version: 1.2
+spec_type: interface
+description: "Undock the robot using a Nav2 UndockRobot action server."
+interface:
+  actions:
+    "/undock_robot":
+      type: "nav2_msgs::action::UndockRobot"
+      description: "Undock the robot from its charging dock."
